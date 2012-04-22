@@ -6,6 +6,6 @@ Webhook for delivering Pivotal Tracker stories on deployment
 
 In your config.ru, you must set your Tracker API token and project ID
 
-`Deliverance::Server.token = 'foo'
+`Deliverance::Server.token = 'foo'`
 
-`Deliverance::Server.project_id = 'bar'
+`Deliverance::Server.project_id = 'bar'`
