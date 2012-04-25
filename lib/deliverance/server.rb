@@ -39,7 +39,7 @@ module Deliverance
       end
 
       def headers
-        { 'X-Tracker-Token' => tracker_token, 'Content-Type' => 'application/xml' }
+        { 'X-TrackerToken' => tracker_token, 'Content-Type' => 'application/xml' }
       end
 
       def deliver(story_id)
