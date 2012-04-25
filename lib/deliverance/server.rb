@@ -23,7 +23,7 @@ module Deliverance
 
     helpers do
       def tracker_url(story_id)
-        "http://http://www.pivotaltracker.com/services/v3/projects/#{project_id}/stories/#{story_id}"
+        "http://www.pivotaltracker.com/services/v3/projects/#{project_id}/stories/#{story_id}"
       end
 
       def delivery_xml
