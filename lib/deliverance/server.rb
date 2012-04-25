@@ -27,7 +27,7 @@ module Deliverance
       end
 
       def delivery_xml
-        '<story><state>delivered</state></story>'
+        '<story><current_state>delivered</current_state></story>'
       end
 
       def tracker_token
