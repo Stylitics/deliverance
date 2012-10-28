@@ -11,7 +11,7 @@ def app
 end
 
 def git_log
-  "[#12345678] fafafaf \n [#87654321]"
+  "[#12345678] fafafaf \n [completes #87654321] \n [fixes #12121212]"
 end
 
 describe app do
@@ -21,7 +21,7 @@ describe app do
     before { stub(RestClient).as_null_object }
 
     it 'should work' do
-      RestClient.should_receive(:put).exactly :twice
+      RestClient.should_receive(:put).twice
       post '/deliver', git_log: git_log
     end
   end
