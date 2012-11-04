@@ -21,7 +21,7 @@ describe app do
     before { stub(RestClient).as_null_object }
 
     it 'should work' do
-      RestClient.should_receive(:put).twice
+      RestClient.should_receive(:put).exactly(:twice)
       post '/deliver', git_log: git_log
     end
   end
