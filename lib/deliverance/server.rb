@@ -15,7 +15,7 @@ module Deliverance
     end
 
     post '/deliver' do
-      stories = params[:git_log].scan /[complete|fix][^\]]+(\d{8})/
+      stories = params[:git_log].scan /\[(complete|fix)[^\]]+\d{8}/
       stories.flatten!
       stories.each do |story|
         deliver story

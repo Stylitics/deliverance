@@ -11,7 +11,7 @@ def app
 end
 
 def git_log
-  "[#12345678] fafafaf \n [completes #87654321] \n [fixes #12121212]"
+  "cmp [#12345678] fafafaf \n [completes #87654321] \n [fixes #12121212]"
 end
 
 describe app do
