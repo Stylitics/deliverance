@@ -33,7 +33,7 @@ module Deliverance
       end
 
       def deliver(story_id)
-        RestClient.post jira_url(story_id), delivery_json, content_type: :json
+        RestClient.post jira_url(story_id), transition_json, content_type: :json
       end
     end
   end
