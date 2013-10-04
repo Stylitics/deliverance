@@ -25,7 +25,7 @@ module Deliverance
 
     helpers do
       def jira_url(story_id)
-        "https://#{user}:#{password}@stylitics.atlassian.net/rest/api/latest/issue/#{story_id}/transitions?expand=transitions.fields"
+        "https://#{self.class.user}:#{self.class.password}@stylitics.atlassian.net/rest/api/latest/issue/#{story_id}/transitions?expand=transitions.fields"
       end
 
       def transition_json
