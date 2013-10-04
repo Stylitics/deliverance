@@ -1,50 +1,39 @@
 require 'sinatra'
 require 'rest-client'
+require 'json'
 
 module Deliverance
   class Server < Sinatra::Base
 
     #these should be set in config.ru like so: Deliverance::Server.token = 'foo'
     class << self
-      attr_accessor :project_id
-      attr_accessor :token
+      attr_accessor :user
+      attr_accessor :password
     end
-    
+
     get '/' do
-      tracker_token + ' ' + project_id
+      'running'
     end
 
     post '/deliver' do
-      stories = params[:git_log].scan /\[(complete|fix)[^\]]+(\d{8})/
-      stories = stories.flatten.map(&:strip).reject{|s| s[/\D/]}
+      stories = params[:git_log].scan /([A-Z]+-\d+).(#complete|#resolve)/
+      stories = stories.map { |s| s[0] }
       stories.each do |story|
         deliver story
       end
     end
 
     helpers do
-      def tracker_url(story_id)
-        "http://www.pivotaltracker.com/services/v3/projects/#{project_id}/stories/#{story_id}"
+      def jira_url(story_id)
+        "https://#{user}:#{password}@stylitics.atlassian.net/rest/api/latest/issue/#{story_id}/transitions?expand=transitions.fields"
       end
 
-      def delivery_xml
-        '<story><current_state>delivered</current_state></story>'
-      end
-
-      def tracker_token
-        self.class.token || raise('You must set your PT API token in config.ru')
-      end
-
-      def project_id
-        self.class.project_id || raise('You must set a project id in config.ru')
-      end
-
-      def headers
-        { 'X-TrackerToken' => tracker_token, 'Content-Type' => 'application/xml' }
+      def transition_json
+        { transition: { id: 51 } }.to_json
       end
 
       def deliver(story_id)
-        RestClient.put tracker_url(story_id), delivery_xml, headers
+        RestClient.post jira_url(story_id), delivery_json, content_type: :json
       end
     end
   end
