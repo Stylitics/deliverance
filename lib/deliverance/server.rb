@@ -16,15 +16,22 @@ module Deliverance
     end
 
     post '/deliver' do
-      stories = params[:git_log].scan /([A-Z]+-\d+).(#complete|#resolve)/
-      stories = stories.map { |s| s[0] }
-      stories.each do |story|
+      filter = JSON.parse RestClient.get filter_url
+      search_url = filter['searchUrl'].gsub(/stylitics/, "#{self.class.user}:#{self.class.password}@stylitics")
+      issues = JSON.parse RestClient.get search_url
+      ids = issues['issues'].map{|i| i['id']}
+      ids.each do |story|
         deliver story
       end
     end
 
     helpers do
-      def jira_url(story_id)
+
+      def filter_url
+        "https://#{self.class.user}:#{self.class.password}@stylitics.atlassian.net/rest/api/latest/filter/11004"
+      end
+
+      def transition_url(story_id)
         "https://#{self.class.user}:#{self.class.password}@stylitics.atlassian.net/rest/api/latest/issue/#{story_id}/transitions?expand=transitions.fields"
       end
 
@@ -33,7 +40,7 @@ module Deliverance
       end
 
       def deliver(story_id)
-        RestClient.post jira_url(story_id), transition_json, content_type: :json
+        RestClient.post transition_url(story_id), transition_json, content_type: :json
       end
     end
   end
